@@ -1,0 +1,62 @@
+{
+  "name": "toolzhub",
+  "version": "1.0.0",
+  "description": "Professional QR code generator with subscription model",
+  "main": "index.js",
+  "homepage": "https://toolz.space",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "type-check": "tsc --noEmit",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:deploy": "firebase deploy",
+    "functions:build": "cd functions && npm run build",
+    "functions:deploy": "cd functions && npm run deploy"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "firebase": "^10.3.1",
+    "qrcode": "^1.5.3",
+    "react-qr-code": "^2.0.11",
+    "@stripe/stripe-js": "^2.1.6",
+    "recharts": "^2.8.0",
+    "react-hook-form": "^7.45.4",
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.268.0",
+    "clsx": "^2.0.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/qrcode": "^1.5.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "autoprefixer": "^10.4.15",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "postcss": "^8.4.28",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "keywords": [
+    "qr-code",
+    "generator",
+    "react",
+    "typescript",
+    "firebase",
+    "stripe",
+    "subscription"
+  ],
+  "author": "BitQuan",
+  "license": "MIT"
+}
