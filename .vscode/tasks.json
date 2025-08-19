@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Server",
+      "type": "shell",
+      "command": "npm run dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Firebase Emulators",
+      "type": "shell",
+      "command": "npm run firebase:emulators",
+      "problemMatcher": []
+    },
+    {
+      "label": "Type Check",
+      "type": "shell",
+      "command": "npm run type-check",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Clean Dist + Build",
+      "type": "shell",
+      "command": "rm -rf dist && npm run build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Functions: Build",
+      "type": "shell",
+      "command": "cd functions && npm run build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Firebase: Deploy All",
+      "type": "shell",
+      "command": "firebase deploy",
+      "problemMatcher": []
+    },
+    {
+      "label": "Functions: Deploy",
+      "type": "shell",
+      "command": "firebase deploy --only functions",
+      "problemMatcher": []
+    }
+  ]
+}
