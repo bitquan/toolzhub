@@ -14,7 +14,9 @@
     "firebase:emulators": "firebase emulators:start",
     "firebase:deploy": "firebase deploy",
     "functions:build": "cd functions && npm run build",
-    "functions:deploy": "cd functions && npm run deploy"
+    "functions:deploy": "cd functions && npm run deploy",
+    "secrets:export": "node ./scripts/secrets/export-secrets.mjs",
+    "secrets:import": "node ./scripts/secrets/import-secrets.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
