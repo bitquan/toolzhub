@@ -11,8 +11,6 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-const env: Record<string, any> = (import.meta as any)?.env || {};
-
 interface AnalyticsEvent {
   userId?: string;
   route: string;
@@ -47,7 +45,7 @@ class AnalyticsService {
   ): Promise<void> {
     try {
       // Skip tracking if marked as test traffic in production
-      if (metadata?.isTestTraffic && !env.DEV) {
+      if (metadata?.isTestTraffic && !import.meta.env.DEV) {
         return;
       }
 
@@ -153,7 +151,7 @@ class AnalyticsService {
   ): Promise<void> {
     try {
       // Skip tracking if marked as test traffic in production
-      if (metadata?.isTestTraffic && !env.DEV) {
+      if (metadata?.isTestTraffic && !import.meta.env.DEV) {
         return;
       }
 

@@ -10,7 +10,7 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const fileIdx = args.indexOf('--file');
   const passIdx = args.indexOf('--pass');
-  const baseIdx = args.indexOf('--dest');
+  const destIdx = args.indexOf('--dest');
   return {
     file:
       fileIdx !== -1 && args[fileIdx + 1]
@@ -18,8 +18,8 @@ function parseArgs() {
         : null,
     pass: passIdx !== -1 ? args[passIdx + 1] : process.env.SECRETS_PASSPHRASE,
     dest:
-      baseIdx !== -1 && args[baseIdx + 1]
-        ? path.resolve(cwd, args[baseIdx + 1])
+      destIdx !== -1 && args[destIdx + 1]
+        ? path.resolve(cwd, args[destIdx + 1])
         : cwd,
   };
 }
@@ -51,7 +51,7 @@ async function main() {
   }
   if (!pass) {
     console.error(
-      'Missing passphrase. Provide with --pass <pass> or env SECRETS_PASSPHRASE.'
+      'Missing passphrase. Use --pass <pass> or env SECRETS_PASSPHRASE'
     );
     process.exit(1);
   }
@@ -59,11 +59,11 @@ async function main() {
     console.error(`File not found: ${file}`);
     process.exit(1);
   }
+
   const payload = JSON.parse(fs.readFileSync(file, 'utf8'));
   const data = decrypt(pass, payload);
-
   if (!Array.isArray(data.files)) {
-    console.error('Invalid bundle format: files[] missing');
+    console.error('Invalid bundle: files[] missing');
     process.exit(1);
   }
 

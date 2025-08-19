@@ -105,7 +105,7 @@ const DevAdminLogin: React.FC = () => {
               {loading ? 'Signing in...' : 'Sign in as Admin'}
             </button>
 
-            {(import.meta as any)?.env?.DEV && (
+            {import.meta.env.DEV && (
               <div className="border-t border-gray-200 pt-3">
                 <p className="text-xs text-gray-500 text-center mb-2">
                   Development Mode Only

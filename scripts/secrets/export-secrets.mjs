@@ -45,9 +45,7 @@ function collectFiles(list) {
   const entries = [];
   for (const rel of list) {
     const abs = path.resolve(cwd, rel);
-    if (!fileExists(abs)) {
-      continue;
-    }
+    if (!fileExists(abs)) continue;
     const content = fs.readFileSync(abs, 'utf8');
     entries.push({ path: rel, content });
   }
@@ -78,7 +76,7 @@ async function main() {
   const passphrase = pass;
   if (!passphrase) {
     console.error(
-      'Missing passphrase. Provide with --pass <pass> or env SECRETS_PASSPHRASE.'
+      'Missing passphrase. Use --pass <pass> or env SECRETS_PASSPHRASE'
     );
     process.exit(1);
   }
@@ -89,12 +87,9 @@ async function main() {
     process.exit(1);
   }
 
-  const payload = {
-    createdAt: new Date().toISOString(),
-    files,
-  };
+  const payload = { createdAt: new Date().toISOString(), files };
   const enc = encrypt(passphrase, payload);
-  // Ensure output directory exists
+
   const outDir = path.dirname(out);
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(out, JSON.stringify(enc, null, 2) + '\n', 'utf8');

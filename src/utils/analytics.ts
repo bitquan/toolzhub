@@ -1,29 +1,17 @@
 // Analytics utilities for filtering test traffic and tracking unique users
-
-// Lightweight UUID generator using Web Crypto when available, fallback to random
-const uuidv4 = (): string => {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return (crypto as any).randomUUID();
-  }
-  // Fallback RFC4122-ish
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-};
+import { v4 as uuidv4 } from 'uuid';
 
 const ANALYTICS_STORAGE_KEY = 'toolzhub_analytics_user';
 const ADMIN_EXCLUSION_KEY = 'toolzhub_admin_user';
 
 // Generate or get existing user token
 export const getAnalyticsUserToken = (): string => {
-  const existing = localStorage.getItem(ANALYTICS_STORAGE_KEY);
-  if (existing && typeof existing === 'string') {
-    return existing;
+  let token = localStorage.getItem(ANALYTICS_STORAGE_KEY);
+  if (!token) {
+    token = uuidv4();
+    localStorage.setItem(ANALYTICS_STORAGE_KEY, token);
+    return token;
   }
-  const token: string = uuidv4();
-  localStorage.setItem(ANALYTICS_STORAGE_KEY, token);
   return token;
 };
 
@@ -91,12 +79,12 @@ export interface AnalyticsEvent {
 // Session management
 export const getSessionId = (): string => {
   const SESSION_KEY = 'toolzhub_session_id';
-  const existing = sessionStorage.getItem(SESSION_KEY);
-  if (existing && typeof existing === 'string') {
-    return existing;
+  let sessionId = sessionStorage.getItem(SESSION_KEY);
+  if (!sessionId) {
+    sessionId = uuidv4();
+    sessionStorage.setItem(SESSION_KEY, sessionId);
+    return sessionId;
   }
-  const sessionId: string = uuidv4();
-  sessionStorage.setItem(SESSION_KEY, sessionId);
   return sessionId;
 };
 
@@ -105,8 +93,7 @@ export const createAnalyticsEvent = (route: string): AnalyticsEvent | null => {
   const isTestTraffic = shouldExcludeFromAnalytics();
 
   // Return null if this should be excluded (no tracking)
-  const env: Record<string, any> = (import.meta as any)?.env || {};
-  if (isTestTraffic && !env.DEV) {
+  if (isTestTraffic && !import.meta.env.DEV) {
     return null;
   }
 

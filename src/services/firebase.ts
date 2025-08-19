@@ -5,17 +5,14 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { getAnalytics } from 'firebase/analytics';
 
-// Safe access to Vite env to satisfy TS in strict checks
-const env: Record<string, any> = (import.meta as any)?.env || {};
-
 const firebaseConfig = {
-  apiKey: env.VITE_FIREBASE_API_KEY || 'demo-api-key',
-  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || 'demo-project.firebaseapp.com',
-  projectId: env.VITE_FIREBASE_PROJECT_ID || 'demo-project',
-  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || 'demo-project.appspot.com',
-  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '123456789',
-  appId: env.VITE_FIREBASE_APP_ID || 'demo-app-id',
-  measurementId: env.VITE_FIREBASE_MEASUREMENT_ID || 'G-XXXXXXXXXX',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'demo-api-key',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'demo-project.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'demo-project',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'demo-project.appspot.com',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '123456789',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || 'demo-app-id',
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || 'G-XXXXXXXXXX',
 };
 
 // Initialize Firebase
@@ -28,17 +25,16 @@ export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
 // Initialize Analytics (only in production)
-export const analytics =
-  typeof window !== 'undefined' && env.PROD ? getAnalytics(app) : null;
+export const analytics = typeof window !== 'undefined' && import.meta.env.PROD 
+  ? getAnalytics(app) 
+  : null;
 
 // Connect to emulators in development
-if (env.DEV) {
+if (import.meta.env.DEV) {
   try {
     // Check if emulators are running by attempting to connect
     if (!(auth as any)._delegate._emulator) {
-      connectAuthEmulator(auth, 'http://localhost:9099', {
-        disableWarnings: true,
-      });
+      connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
     }
     if (!(db as any)._delegate._settings?.host?.includes('localhost')) {
       connectFirestoreEmulator(db, 'localhost', 8080);
