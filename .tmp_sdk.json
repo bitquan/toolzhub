@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "result": {
+    "fileName": "firebase-js-config.json",
+    "fileContents": "{\n  \"projectId\": \"toolzhub-5014-31157\",\n  \"appId\": \"1:670124231210:web:338eefb7d6883ca7909153\",\n  \"storageBucket\": \"toolzhub-5014-31157.firebasestorage.app\",\n  \"apiKey\": \"AIzaSyCp5zyotoKSqBmgdLUqqdJG19IPN8rX6lU\",\n  \"authDomain\": \"toolzhub-5014-31157.firebaseapp.com\",\n  \"messagingSenderId\": \"670124231210\"\n}",
+    "sdkConfig": {
+      "projectId": "toolzhub-5014-31157",
+      "appId": "1:670124231210:web:338eefb7d6883ca7909153",
+      "storageBucket": "toolzhub-5014-31157.firebasestorage.app",
+      "apiKey": "AIzaSyCp5zyotoKSqBmgdLUqqdJG19IPN8rX6lU",
+      "authDomain": "toolzhub-5014-31157.firebaseapp.com",
+      "messagingSenderId": "670124231210"
+    }
+  }
+}

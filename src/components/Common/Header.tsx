@@ -56,6 +56,14 @@ export function Header() {
                 Dashboard
               </Link>
             )}
+            {user && (
+              <Link
+                to="/admin"
+                className="text-gray-700 hover:text-primary-600 transition-colors"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* Desktop Auth */}
@@ -108,10 +116,7 @@ export function Header() {
                 >
                   Sign In
                 </Link>
-                <Link
-                  to="/register"
-                  className="btn-primary"
-                >
+                <Link to="/register" className="btn-primary">
                   Get Started
                 </Link>
               </>
@@ -123,7 +128,11 @@ export function Header() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2 text-gray-700 hover:text-primary-600"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -162,8 +171,17 @@ export function Header() {
                 Dashboard
               </Link>
             )}
+            {user && (
+              <Link
+                to="/admin"
+                className="block px-3 py-2 text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Admin
+              </Link>
+            )}
           </div>
-          
+
           <div className="pt-4 pb-3 border-t border-gray-200">
             {user ? (
               <div className="px-2 space-y-1">

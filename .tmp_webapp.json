@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "result": {
+    "@type": "type.googleapis.com/google.firebase.service.v1beta1.WebApp",
+    "name": "projects/toolzhub-5014-31157/webApps/1:670124231210:web:338eefb7d6883ca7909153",
+    "appId": "1:670124231210:web:338eefb7d6883ca7909153",
+    "displayName": "toolzhub-web",
+    "projectId": "toolzhub-5014-31157",
+    "webId": "ZDgyY2FmOWMtODkyOC00ZGNlLTgxZDUtNWQ3ZWQxMDM5NGJh",
+    "apiKeyId": "46ca8ab1-8a5e-41f8-9c9b-a2087f6f4b90",
+    "state": "ACTIVE",
+    "expireTime": "1970-01-01T00:00:00Z",
+    "etag": "1_f06b716e-8aae-4d26-9172-2a3307e35d25"
+  }
+}
