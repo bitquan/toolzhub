@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type MockedFunction } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { Dashboard } from '../../pages/Dashboard';
@@ -18,7 +18,7 @@ vi.mock('../../contexts/UserDataContext', () => ({
 }));
 
 // Mock AuthContext hook
-vi.mock('../../contexts/AuthContext', () => ({
+vi.mock('@/hooks/useAuth', () => ({
   useAuth: vi.fn(() => ({
     user: { uid: 'test-user-id', email: 'test@example.com' },
     loading: false,
@@ -59,7 +59,7 @@ vi.mock('react-router-dom', async () => {
 
 import { useUserData } from '../../contexts/UserDataContext';
 
-const mockUseUserData = useUserData as vi.MockedFunction<typeof useUserData>;
+const mockUseUserData = useUserData as MockedFunction<typeof useUserData>;
 
 // Helper function to render Dashboard with router
 const renderDashboard = () => {

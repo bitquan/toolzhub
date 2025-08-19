@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, QrCode, User, Settings, LogOut } from 'lucide-react';
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

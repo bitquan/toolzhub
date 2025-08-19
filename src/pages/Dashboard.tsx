@@ -1,19 +1,60 @@
-import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserData } from '@/contexts/UserDataContext';
+import { subscriptionService } from '@/services/subscription';
 import { QrCode, Calendar, BarChart3, Users, Crown } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export function Dashboard() {
   const { user } = useAuth();
-  const [stats] = useState({
-    totalQRCodes: 3,
-    qrCodesThisMonth: 2,
-    totalScans: 147,
-    scansByDay: [],
-  });
+  const { state: userData } = useUserData();
+  const navigate = useNavigate();
 
   const isPro = user?.subscription?.plan === 'pro';
   const qrLimit = isPro ? Infinity : 5;
   const usage = user?.usageStats?.qrCodesThisMonth || 0;
+
+  // Use real data from UserDataContext or fallback to meaningful defaults
+  const stats = {
+    totalQRCodes: userData.qrCodes?.length || 0,
+    qrCodesThisMonth: userData.stats?.qrCodesThisMonth || 0,
+    totalScans: userData.stats?.totalScans || 0,
+    scansByDay: [],
+  };
+
+  const isLoading = userData.statsLoading || userData.qrCodesLoading;
+
+  const handleUpgradeClick = async () => {
+    if (!user) {
+      toast.error('Please log in to upgrade to Pro');
+      return;
+    }
+
+    try {
+      await subscriptionService.upgradeToProWithRedirect(user);
+    } catch (error) {
+      console.error('Upgrade error:', error);
+      toast.error(
+        `Failed to start upgrade process: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
+    }
+  };
+
+  const handleCreateQRCode = () => {
+    navigate('/generate');
+  };
+
+  const handleViewAnalytics = () => {
+    navigate('/analytics');
+  };
+
+  const handleViewAllQRCodes = () => {
+    // For now, navigate to the QR generator page
+    // In the future, this could be a dedicated QR codes management page
+    navigate('/generate');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -48,7 +89,7 @@ export function Dashboard() {
                 </div>
               </div>
               {!isPro && (
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={handleUpgradeClick}>
                   Upgrade to Pro
                 </button>
               )}
@@ -124,61 +165,55 @@ export function Dashboard() {
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent QR Codes</h2>
             <div className="space-y-4">
-              {/* Sample QR codes - in real app, this would come from Firestore */}
-              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-lg">🌐</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Website QR</p>
-                    <p className="text-sm text-gray-600">https://example.com</p>
-                    <p className="text-xs text-gray-500">Created 2 days ago</p>
-                  </div>
+              {isLoading ? (
+                <div className="animate-pulse space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="p-4 border border-gray-200 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+                        <div className="flex-1">
+                          <div className="h-4 bg-gray-200 rounded w-1/2 mb-1"></div>
+                          <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">47 scans</p>
-                  <p className="text-xs text-gray-500">Last scan: 2h ago</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-lg">📶</span>
+              ) : userData.qrCodes && userData.qrCodes.length > 0 ? (
+                userData.qrCodes.slice(0, 3).map((qr) => (
+                  <div key={qr.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                        <span className="text-lg">🔗</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{qr.title}</p>
+                        <p className="text-sm text-gray-600 truncate max-w-48">{qr.url}</p>
+                        <p className="text-xs text-gray-500">
+                          Created {new Date(qr.createdAt?.toDate?.() || qr.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-gray-900">{qr.scanCount || 0} scans</p>
+                      <p className="text-xs text-gray-500">Active</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">WiFi QR</p>
-                    <p className="text-sm text-gray-600">Office Network</p>
-                    <p className="text-xs text-gray-500">Created 5 days ago</p>
-                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <QrCode className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                  <p className="text-sm font-medium">No QR codes yet</p>
+                  <p className="text-xs">Create your first QR code to get started</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">23 scans</p>
-                  <p className="text-xs text-gray-500">Last scan: 1d ago</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-lg">👤</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Contact Card</p>
-                    <p className="text-sm text-gray-600">John Doe</p>
-                    <p className="text-xs text-gray-500">Created 1 week ago</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">77 scans</p>
-                  <p className="text-xs text-gray-500">Last scan: 3h ago</p>
-                </div>
-              </div>
+              )}
             </div>
 
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <button className="w-full text-primary-600 hover:text-primary-700 font-medium">
+              <button 
+                className="w-full text-primary-600 hover:text-primary-700 font-medium"
+                onClick={handleViewAllQRCodes}
+              >
                 View All QR Codes
               </button>
             </div>
@@ -188,16 +223,25 @@ export function Dashboard() {
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
             <div className="space-y-3">
-              <button className="w-full btn-primary text-left p-4 flex items-center">
+              <button 
+                className="w-full btn-primary text-left p-4 flex items-center"
+                onClick={handleCreateQRCode}
+              >
                 <QrCode className="h-5 w-5 mr-3" />
                 Create New QR Code
               </button>
-              <button className="w-full btn-secondary text-left p-4 flex items-center">
+              <button 
+                className="w-full btn-secondary text-left p-4 flex items-center"
+                onClick={handleViewAnalytics}
+              >
                 <BarChart3 className="h-5 w-5 mr-3" />
                 View Analytics
               </button>
               {!isPro && (
-                <button className="w-full btn-outline text-left p-4 flex items-center">
+                <button 
+                  className="w-full btn-outline text-left p-4 flex items-center"
+                  onClick={handleUpgradeClick}
+                >
                   <Crown className="h-5 w-5 mr-3" />
                   Upgrade to Pro
                 </button>

@@ -10,7 +10,6 @@ export const getAnalyticsUserToken = (): string => {
   if (!token) {
     token = uuidv4();
     localStorage.setItem(ANALYTICS_STORAGE_KEY, token);
-    return token;
   }
   return token;
 };
@@ -83,7 +82,6 @@ export const getSessionId = (): string => {
   if (!sessionId) {
     sessionId = uuidv4();
     sessionStorage.setItem(SESSION_KEY, sessionId);
-    return sessionId;
   }
   return sessionId;
 };

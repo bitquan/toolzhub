@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useUserData } from '@/contexts/UserDataContext';
 import { useState } from 'react';
 import {

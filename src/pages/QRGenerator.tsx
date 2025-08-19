@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useUserData } from '@/contexts/UserDataContext';
 import { subscriptionService } from '@/services/subscription';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -598,9 +598,9 @@ export function QRGenerator() {
                 Security Type
               </label>
               <select
-                value={qrData.encryption || 'WPA'}
+                value={qrData.security || 'WPA'}
                 onChange={(e) =>
-                  setQrData((prev) => ({ ...prev, encryption: e.target.value }))
+                  setQrData((prev) => ({ ...prev, security: e.target.value as 'WEP' | 'WPA' | 'WPA2' | 'nopass' }))
                 }
                 className="input-field"
               >

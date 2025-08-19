@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -14,21 +14,12 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { auth, db } from '@/services/firebase';
 import { User, AuthContextType, Subscription, UsageStats } from '@/types';
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './AuthContextType';
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
 
 interface AuthProviderProps {
   children: React.ReactNode;
