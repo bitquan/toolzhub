@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { QrCode, Calendar, BarChart3, Users, Crown } from 'lucide-react';
 
 export function Dashboard() {

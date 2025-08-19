@@ -53,7 +53,7 @@ export const trackQRScan = functions.https.onCall(async (data, context) => {
 });
 
 // Reset monthly usage counters
-export const resetMonthlyUsage = functions.pubsub.schedule('0 0 1 * *').onRun(async (context) => {
+export const resetMonthlyUsage = functions.pubsub.schedule('0 0 1 * *').onRun(async (_context) => {
   const batch = admin.firestore().batch();
   
   const usersSnapshot = await admin.firestore().collection('users').get();

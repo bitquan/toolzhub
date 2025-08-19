@@ -150,10 +150,10 @@ describe('UserData Service Functions', () => {
       const dataCallback = vi.fn();
       const errorCallback = vi.fn();
 
-      mockOnSnapshot.mockImplementation((query, callback) => {
+      mockOnSnapshot.mockImplementation((_query, callback) => {
         // Simulate Firebase calling back with data
         setTimeout(() => {
-          callback({
+          (callback as any)({
             docs: [
               {
                 id: 'qr1',
@@ -189,10 +189,10 @@ describe('UserData Service Functions', () => {
       const errorCallback = vi.fn();
       const testError = new Error('Firebase connection failed');
 
-      mockOnSnapshot.mockImplementation((query, callback, errorCallback) => {
+      mockOnSnapshot.mockImplementation((_query, _callback, onError) => {
         // Simulate Firebase error
         setTimeout(() => {
-          errorCallback(testError);
+          (onError as any)?.(testError);
         }, 0);
         return vi.fn();
       });

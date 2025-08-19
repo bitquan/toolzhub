@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/services/firebase';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Plus, Save, Eye, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
